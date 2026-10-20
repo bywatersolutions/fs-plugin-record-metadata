@@ -20,7 +20,9 @@
       >
         <thead>
           <tr>
-            <th>Online link</th>
+            <th>Online link (856u)</th>
+            <th>(856y)</th>
+            <th>(856x)</th>
           </tr>
         </thead>
         <tbody>
@@ -29,6 +31,12 @@
               <a :href="link.url" target="_blank" rel="noopener">{{
                 link.url
               }}</a>
+            </td>
+            <td>
+                {{ link.y856 }}
+            </td>
+            <td>
+                {{ link.x856 }}
             </td>
           </tr>
         </tbody>

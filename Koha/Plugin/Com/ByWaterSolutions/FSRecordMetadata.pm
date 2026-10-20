@@ -376,12 +376,16 @@ sub get_record_details {
     my @online_links;
     for my $field ( $record->field('856') ) {
         my $url = $field->subfield('u');
+        my $x856 = $field->subfield('x');
+        my $y856 = $field->subfield('y');
         next unless defined $url && length $url;
         my $label = $field->subfield('y')      # link text
                  // $field->subfield('3')      # materials specified
-                 // $field->subfield('z');     # public note
+                 // $field->subfield('z');      # public note
         push @online_links, {
             url   => $url,
+            x856  => $x856,
+            y856  => $y856,
             label => ( defined $label && length $label ) ? $label : $url,
         };
     }
