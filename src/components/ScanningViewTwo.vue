@@ -2,8 +2,12 @@
   <ScanningForm
     :entry="entry"
     :field-keys="fieldKeys"
+    :search-type="searchType"
+    :search-term="searchTerm"
+    @search="$emit('search', $event)"
     :prev-step="1"
     prev-step-label="Save and return to scanning"
+    prev-step-view="create"
     @saved="$emit('saved', $event)"
     @step="$emit('step', $event)"
   >
@@ -179,8 +183,10 @@ export default {
   components: { ScanningForm, ProblemNumbers },
   props: {
     entry: { type: Object, default: null },
+    searchType: { type: String, default: "biblionumber" },
+    searchTerm: { type: String, default: "" },
   },
-  emits: ["saved", "step"],
+  emits: ["saved", "step", "search"],
   data() {
     return {
       fieldKeys: [

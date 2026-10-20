@@ -1,16 +1,15 @@
 <template>
   <div>
-    <form @submit.prevent="search" class="fsrm-search">
-      <select v-model="searchType">
+      <form @submit.prevent="search" class="fsrm-search">
+      <select v-model="localSearchType">
         <option value="biblionumber">TN (biblionumber)</option>
         <option value="barcode">Barcode</option>
       </select>
-      <input v-model.trim="searchTerm" placeholder="Find an entry" />
-      <button type="submit" class="btn btn-primary" :disabled="!searchTerm || loading">
+      <input v-model.trim="localSearchTerm" placeholder="Find an entry" />
+      <button type="submit" class="btn btn-primary" :disabled="!localSearchTerm || loading">
         {{ loading ? "Searching…" : "Find entry" }}
       </button>
     </form>
-
     <p v-if="error" class="fsrm-error">{{ error }}</p>
     <p v-if="searched && !entries.length && !loading">
       No entries found. Create one first.
@@ -72,7 +71,7 @@
             {{ saving ? "Saving…" : "Save" }}
           </button>
           <button
-            v-if="nextStep && $canView(prevStepView)"
+            v-if="nextStep && $canView(nextStepView)"
             class="btn btn-primary"
             type="button"
             :disabled="saving || !$canWrite()"
@@ -111,12 +110,16 @@ export default {
     nextStepLabel: { type: String, default: "Save and continue" },
     prevStep: { type: Number, default: null },
     prevStepLabel: { type: String, default: "Save and go back" },
+    searchType: { type: String, default: "biblionumber" },
+    searchTerm: { type: String, default: "" },
+    nextStepView: { type: String, default: null },
+    prevStepView: { type: String, default: null },
   },
-  emits: ["saved", "step", "cancel"],
+  emits: ["saved", "step", "cancel", "search"],
   data() {
     return {
-      searchType: "biblionumber",
-      searchTerm: "",
+      localSearchType: this.searchType,
+      localSearchTerm: this.searchTerm,
       entries: [],
       selected: null,
       form: {},
@@ -130,23 +133,38 @@ export default {
       editingProblemId: null,
     };
   },
-  created() {
-    if (this.entry) this.select(this.entry);
-  },
   watch: {
     entry(val) {
       if (val) this.select(val);
     },
+    searchTerm: {
+      immediate: true,
+      handler(val) {
+        this.localSearchTerm = val || "";
+        if (val && !this.entry) this.search();
+      },
+    },
+    searchType: {
+      immediate: true,
+      handler(val) {
+        this.localSearchType = val || "biblionumber";
+      },
+    },
+  },
+  created() {
+    if (this.entry) this.select(this.entry);
   },
   methods: {
     async search() {
+      console.log("search fired", this.localSearchType, this.localSearchTerm);
+      this.$emit("search", { type: this.localSearchType, term: this.localSearchTerm });
       this.loading = true;
       this.error = null;
       this.entries = [];
       this.selected = null;
       this.savedAt = null;
       try {
-        this.entries = await getEntries({ [this.searchType]: this.searchTerm });
+        this.entries = await getEntries({ [this.localSearchType]: this.localSearchTerm });
         if (this.entries.length === 1) this.select(this.entries[0]);
       } catch (e) {
         this.error = e.message;

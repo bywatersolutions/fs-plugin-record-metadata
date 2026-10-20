@@ -1,12 +1,12 @@
 <template>
   <div>
-    <form @submit.prevent="runSearch" class="fsrm-search">
-      <select v-model="searchType">
+    <form @submit.prevent="runSearch()" class="fsrm-search">
+      <select v-model="localSearchType">
         <option value="biblionumber">TN (biblionumber)</option>
         <option value="barcode">Barcode</option>
       </select>
-      <input v-model.trim="searchTerm" placeholder="Search for an entry" />
-      <button type="submit" class="btn btn-primary" :disabled="!searchTerm">
+      <input v-model.trim="localSearchTerm" placeholder="Search for an entry" />
+      <button type="submit" class="btn btn-primary" :disabled="!localSearchTerm">
         Search
       </button>
     </form>
@@ -60,10 +60,15 @@ const iconToggle = (d) =>
 export default {
   name: "SearchView",
   components: { DataTable },
+  props: {
+    searchType: { type: String, default: "biblionumber" },
+    searchTerm: { type: String, default: "" },
+  },
+  emits: ["search"],
   data() {
     return {
-      searchType: "biblionumber",
-      searchTerm: "",
+      localSearchType: this.searchType,
+      localSearchTerm: this.searchTerm,
       activeSearch: null, // frozen copy of the submitted search
       tableKey: 0,
       error: null,
@@ -132,10 +137,33 @@ export default {
       };
     },
   },
+  watch: {
+    searchType: {
+      immediate: true,
+      handler(val) {
+        this.localSearchType = val || "biblionumber";
+      },
+    },
+    searchTerm: {
+      immediate: true,
+      handler(val) {
+        this.localSearchTerm = val || "";
+        if (val) this.runSearch({ emit: false });
+      },
+    },
+  },
   methods: {
-    runSearch() {
+    // opts.emit === false when the search came from the shared state (a prop),
+    // so we don't echo it straight back to the parent.
+    runSearch(opts = {}) {
       this.error = null;
-      this.activeSearch = { type: this.searchType, term: this.searchTerm };
+      if (opts.emit !== false) {
+        this.$emit("search", {
+          type: this.localSearchType,
+          term: this.localSearchTerm,
+        });
+      }
+      this.activeSearch = { type: this.localSearchType, term: this.localSearchTerm };
       this.tableKey += 1; // remount the table so a new search starts at page 1
     },
   },

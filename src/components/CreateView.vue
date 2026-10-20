@@ -1,15 +1,15 @@
 <template>
   <div>
-    <form @submit.prevent="lookup" class="fsrm-search">
-      <select v-model="searchType">
+    <form @submit.prevent="lookup()" class="fsrm-search">
+      <select v-model="localSearchType">
         <option value="biblionumber">TN (biblionumber)</option>
         <option value="barcode">Barcode</option>
       </select>
-      <input v-model.trim="searchTerm" placeholder="Search for a record" />
+      <input v-model="localSearchTerm" placeholder="Search for a record" />
       <button
         type="submit"
         class="btn btn-primary"
-        :disabled="!searchTerm || loading"
+        :disabled="!localSearchTerm || loading"
       >
         {{ loading ? "Searching…" : "Find record" }}
       </button>
@@ -96,10 +96,15 @@ import { lookupRecord, createEntry, checkDtn as checkDtnApi } from "../api";
 
 export default {
   name: "CreateView",
+  props: {
+    searchType: { type: String, default: "biblionumber" },
+    searchTerm: { type: String, default: "" },
+  },
+  emits: ["created", "search"],
   data() {
     return {
-      searchType: "biblionumber",
-      searchTerm: "",
+      localSearchType: this.searchType,
+      localSearchTerm: this.searchTerm,
       record: null,
       loading: false,
       saving: false,
@@ -134,6 +139,19 @@ export default {
         this.dtnCheckTimer = setTimeout(() => this.checkDtn(value), 300);
       },
     },
+    searchType: {
+      immediate: true,
+      handler(val) {
+        this.localSearchType = val || "biblionumber";
+      },
+    },
+    searchTerm: {
+      immediate: true,
+      handler(val) {
+        this.localSearchTerm = val || "";
+        if (val) this.lookup({ emit: false });
+      },
+    },
   },
   methods: {
     async checkDtn(value) {
@@ -153,13 +171,19 @@ export default {
         scan_site: "",
       };
     },
-    async lookup() {
+    async lookup(opts ={}) {
+      if (opts.emit !== false) {
+        this.$emit("search", {
+          type: this.localSearchType,
+          term: this.localSearchTerm,
+        });
+      }
       this.loading = true;
       this.error = null;
       this.record = null;
       this.saved = null;
       try {
-        this.record = await lookupRecord({ [this.searchType]: this.searchTerm });
+        this.record = await lookupRecord({ [this.localSearchType]: this.localSearchTerm });
         this.entry = this.blankEntry();
       } catch (e) {
         this.error = e.message;

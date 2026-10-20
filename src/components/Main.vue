@@ -1,12 +1,27 @@
 <template>
   <div class="fs-record-metadata">
     <NavBar :current="view" @navigate="view = $event" />
-    <SearchView v-if="view === 'search'" @select="openEntry" />
-    <CreateView v-if="view === 'new'" @created="openEntry" />
+    <SearchView
+      v-if="view === 'search'"
+      :search-type="searchType"
+      :search-term="searchTerm"
+      @search="onSearch"
+      @select="openEntry"
+    />
+    <CreateView
+      v-if="view === 'new'"
+      :search-type="searchType"
+      :search-term="searchTerm"
+      @search="onSearch"
+      @created="openEntry"
+    />
     <BulkCreateView v-if="view === 'bulknew'" @created="openEntry" />
     <ScanningViewOne
       v-if="view === 'create'"
       :entry="entry"
+      :search-type="searchType"
+      :search-term="searchTerm"
+      @search="onSearch"
       @saved="onSaved"
       @step="onStep"
       @cancel="closeEntry"
@@ -14,6 +29,9 @@
     <ScanningViewTwo
       v-if="view === 'create2'"
       :entry="entry"
+      :search-type="searchType"
+      :search-term="searchTerm"
+      @search="onSearch"
       @saved="onSaved"
       @step="onStep"
       @cancel="closeEntry"
@@ -36,9 +54,14 @@ export default {
   name: "Main",
   components: { SearchView, CreateView, BulkCreateView, ScanningViewOne, ScanningViewTwo, ProblemsView, AdminView },
   data() {
-    return { view: "search", entry: null };
+    return { view: "search", entry: null, searchType: "biblionumber", searchTerm: "", };
   },
   methods: {
+    onSearch({ type, term }) {
+    console.log("Main.onSearch", type, term);
+      this.searchType = type;
+      this.searchTerm = term;
+    },
     openEntry(entry) {
       this.entry = entry;
       this.view = "create";

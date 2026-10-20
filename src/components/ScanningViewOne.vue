@@ -2,8 +2,12 @@
   <ScanningForm
     :entry="entry"
     :field-keys="fieldKeys"
+    :search-type="searchType"
+    :search-term="searchTerm"
+    @search="$emit('search', $event)"
     :next-step="2"
     next-step-label="Save and continue to processing"
+    next-step-view="create2"
     @saved="$emit('saved', $event)"
     @step="$emit('step', $event)"
   >
@@ -149,8 +153,12 @@ import StaffPicker from "./StaffPicker.vue";
 export default {
   name: "ScanningViewOne",
   components: { ScanningForm, ProblemNumbers, DateField, StaffPicker },
-  props: { entry: { type: Object, default: null } },
-  emits: ["saved", "step"],
+  props: {
+    entry: { type: Object, default: null },
+    searchType: { type: String, default: "biblionumber" },
+    searchTerm: { type: String, default: "" },
+  },
+  emits: ["saved", "step", "search"],
   data() {
     return {
       fieldKeys: [
