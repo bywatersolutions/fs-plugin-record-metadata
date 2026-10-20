@@ -126,11 +126,25 @@ sub search_entries {
     }
 
     if ( defined $filters->{barcode} ) {
-        push @where,
-            'e.biblionumber IN (SELECT i.biblionumber FROM items i WHERE i.barcode = ?)';
-        push @binds, $filters->{barcode};
-    }
+        my $barcode = $filters->{barcode};
+        my $op      = '=';
 
+        if ( $barcode =~ /\*/ ) {
+            $barcode =~ s/([%_\\])/\\$1/g;
+            $barcode =~ s/\*/%/g;
+            $op = 'LIKE';
+        }
+
+        push @where, qq{
+            EXISTS (
+                SELECT 1 FROM items i
+                WHERE i.barcode $op ?
+                  AND i.biblionumber = e.biblionumber
+                  AND ( e.itemnumber IS NULL OR e.itemnumber = i.itemnumber )
+            )
+        };
+        push @binds, $barcode;
+    }
     my $where = @where ? 'WHERE ' . join( ' AND ', @where ) : '';
 
     my $from = qq{
