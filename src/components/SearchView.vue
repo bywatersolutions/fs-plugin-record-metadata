@@ -64,7 +64,7 @@ export default {
     searchType: { type: String, default: "biblionumber" },
     searchTerm: { type: String, default: "" },
   },
-  emits: ["search"],
+  emits: ["search", "select"],
   data() {
     return {
       localSearchType: this.searchType,

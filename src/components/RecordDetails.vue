@@ -83,7 +83,7 @@
           </tr>
         </tbody>
       </table>
-      <p v-else><em>No items attached to this record.</em></p>
+      <p v-else><em>No configured items attached to this record. Some items maye be hidden via the configuration page.</em></p>
     </div>
   </fieldset>
 </template>

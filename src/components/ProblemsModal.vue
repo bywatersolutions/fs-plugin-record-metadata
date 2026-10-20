@@ -41,8 +41,8 @@
             <fieldset class="rows">
               <ol>
                 <li>
-                  <label for="p_solution_owner">Solution owner:</label>
-                  <StaffPicker id="p_solution_owner" label="Solution owner" v-model="form.solution_owner" v-model:displayName="names.solution_owner" />
+                  <label for="p_solution_owner">Assigned to:</label>
+                  <StaffPicker id="p_solution_owner" label="Assigned to" v-model="form.solution_owner" v-model:displayName="names.solution_owner" />
                 </li>
                 <li>
                   <label for="p_solution">Solution:</label>
