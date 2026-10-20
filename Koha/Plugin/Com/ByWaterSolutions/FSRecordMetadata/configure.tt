@@ -29,6 +29,12 @@
           </select>
         </li>
         [% END %]
+        <li>
+          <label for="hidden_itypes">Hidden item types:</label>
+          <input type="text" id="hidden_itypes" name="hidden_itypes" size="60"
+                 value="[% hidden_itypes | html %]" />
+          <div class="hint">Configure hidden item types by code, comma separated.</div>
+        </li>
       </ol>
     </fieldset>
 

@@ -246,10 +246,11 @@ sub configure {
                 current => $self->av_category_for($field) // '',
             };
         }
-
+        
         $template->param(
             av_fields  => \@fields,
             categories => \@categories,
+            hidden_itypes => $self->retrieve_data('hidden_itypes') // '',
         );
 
         $self->output_html( $template->output() );
@@ -260,6 +261,7 @@ sub configure {
             my $chosen = scalar $cgi->param("av_category_$field") // '';
             $data{"av_category_$field"} = $chosen;
         }
+        $data{hidden_itypes} = scalar $cgi->param('hidden_itypes') // '';
         $self->store_data( \%data );
         $self->go_home();
     }
@@ -352,6 +354,10 @@ sub get_record_details {
     elsif ( $params->{biblionumber} ) {
         $biblio = Koha::Biblios->find( $params->{biblionumber} );
         @items  = $biblio ? $biblio->items->as_list : ();
+
+        my $hidden = $self->hidden_itypes;
+        @items = grep { !$hidden->{ uc( $_->effective_itemtype // '' ) } } @items
+            if %$hidden;
     }
 
     return unless $biblio;
@@ -496,6 +502,13 @@ sub authorised_values_for_fields {
     }
 
     return \%out;
+}
+
+sub hidden_itypes {
+    my ($self) = @_;
+
+    my $raw = $self->retrieve_data('hidden_itypes') // '';
+    return { map { uc($_) => 1 } grep { length } split /\s*,\s*/, $raw };
 }
 
 sub static_routes {
