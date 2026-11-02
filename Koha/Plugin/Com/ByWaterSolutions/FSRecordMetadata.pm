@@ -88,7 +88,6 @@ sub install {
                 volume_description   VARCHAR(255) NULL,
                 access               VARCHAR(80) NULL,
                 access_source        VARCHAR(20) NULL,
-                number_of_pages      INT(11) NULL,
 
                 md_date              DATE NULL,
                 md_by                INT(11) NULL,

@@ -45,6 +45,7 @@
         </tbody>
       </table>
     </fieldset>
+    <RecordDetails :record="record" />
 
     <div v-if="selected">
       <h2>Digitial title number: {{ selected.dtn }}</h2>
@@ -59,7 +60,6 @@
         :add-problem="addProblem"
       ></slot>
 
-      <RecordDetails :record="record" />
       <fieldset class="action">
         <p v-if="!$canWrite()" class="hint">You have read-only access.</p>
         <div class="btn-toolbar">

@@ -12,15 +12,6 @@
     @step="$emit('step', $event)"
   >
     <template #fields="{ form, names, selected, editProblem, addProblem }">
-      <fieldset class="rows">
-        <ol>
-          <li><span class="label">Title:</span> {{ selected.title }}</li>
-          <li><span class="label">Author:</span> {{ selected.author }}</li>
-          <li><span class="label">Barcodes:</span> {{ selected.barcodes }}</li>
-          <li><span class="label">Call #:</span> {{ selected.callnumbers }}</li>
-        </ol>
-      </fieldset>
-
       <fieldset  class="rows">
         <div id="scanform_step2">
             <ol>
@@ -52,30 +43,6 @@
               <li>
                 <label for="owning_institution">Owning institution:</label>
                 <AvSelect id="owning_institution" field="owning_institution" v-model="form.owning_institution" />
-              </li>
-              <li>
-                <label for="itypes">Item type(s):</label>
-                <input id="itypes" :value="selected.itypes" readonly disabled />
-              </li>
-              <li>
-                <label for="barcodes">Barcode(s):</label>
-                <input id="barcodes" :value="selected.barcodes" readonly disabled />
-              </li>
-              <li>
-                <label for="callnumbers">Call number(s):</label>
-                <input id="callnumbers" :value="selected.callnumbers" readonly disabled />
-              </li>
-              <li>
-                <label for="number_of_pages">Number of pages:</label>
-                <input type="number" id="number_of_pages" v-model.trim="form.number_of_pages" />
-              </li>
-              <li style="margin-top: 1em">
-                <label for="url_856x">URL:</label>
-                <input id="url_856x" />
-              </li>
-              <li>
-                <label for="limb_id">Limb ID:</label>
-                <input id="limb_id" />
               </li>
             </ol>
 
@@ -193,7 +160,6 @@ export default {
         "secondary_identifier",
         "volume_description",
         "owning_institution",
-        "number_of_pages",
 
         "ocr_site",
         "ocr_date",

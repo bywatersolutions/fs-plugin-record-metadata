@@ -37,7 +37,6 @@ our %ENTRY_COLUMNS = (
     secondary_identifier => 'string',
     owning_institution   => 'string',
     volume_description   => 'string',
-    number_of_pages      => 'integer',
 
     md_date              => 'string',
     md_by                => 'integer',

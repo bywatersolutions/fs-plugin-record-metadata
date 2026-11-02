@@ -45,30 +45,6 @@
                 <label for="owning_institution">Owning institution:</label>
                 <AvSelect id="owning_institution" field="owning_institution" v-model="form.owning_institution" />
               </li>
-              <li>
-                <label for="itypes">Item type(s):</label>
-                <input id="itypes" :value="selected.itypes" readonly disabled />
-              </li>
-              <li>
-                <label for="barcodes">Barcode(s):</label>
-                <input id="barcodes" :value="selected.barcodes" readonly disabled />
-              </li>
-              <li>
-                <label for="callnumbers">Call number(s):</label>
-                <input id="callnumbers" :value="selected.callnumbers" readonly disabled />
-              </li>
-              <li>
-                <label for="number_of_pages">Number of pages:</label>
-                <input type="number" id="number_of_pages" v-model.trim="form.number_of_pages" />
-              </li>
-              <li style="margin-top: 1em">
-                <label for="url_856x">URL:</label>
-                <input id="url_856x" />
-              </li>
-              <li>
-                <label for="limb_id">Limb ID:</label>
-                <input id="limb_id" />
-              </li>
             </ol>
 
             <ol>
@@ -161,7 +137,6 @@ export default {
         "secondary_identifier",
         "owning_institution",
         "volume_description",
-        "number_of_pages",
         "md_date",
         "md_by",
         "scan_site",
