@@ -9,11 +9,11 @@
     <fieldset class="rows fs-bulk-form">
       <ol>
         <li>
-          <label for="bulk_owning_institution">Owning institution:</label>
+          <label for="bulk_owning_institution" class="required">Owning institution:</label>
           <AvSelect id="bulk_owning_institution" field="owning_institution" v-model="owningInstitution" />
         </li>
         <li>
-          <label for="bulk_scan_site">Scan site:</label>
+          <label for="bulk_scan_site" class="required">Scan site:</label>
           <AvSelect id="bulk_scan_site" field="scan_site" v-model="scanSite" />
         </li>
         <li>
@@ -57,10 +57,11 @@
       <button class="btn btn-default" type="button" :disabled="!itemCount || loading" @click="preview">
         {{ loading ? "Checking…" : `Review ${itemCount} record${itemCount === 1 ? "" : "s"}` }}
       </button>
-      <button class="btn btn-primary" type="button" :disabled="!selectedCount || saving" @click="create">
+      <button class="btn btn-primary" type="button" :disabled="!selectedCount || saving || !owningInstitution || !scanSite" @click="create">
         {{ saving ? "Creating…" : `Create ${selectedCount} entr${selectedCount === 1 ? "y" : "ies"}` }}
       </button>
       <button v-if="rows.length" class="btn btn-default" type="button" @click="reset">Clear</button>
+      <p v-if="!owningInstitution || !scanSite" class="hint required">Owning institution and scan site are required.</p>
     </fieldset>
 
 
@@ -200,5 +201,8 @@ export default {
 .fs-bulk-form {
     display: grid;
     grid-template-columns: 1fr 3fr;
+}
+.required {
+    color: #CC0000;
 }
 </style>

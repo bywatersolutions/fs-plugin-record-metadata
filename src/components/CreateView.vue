@@ -71,7 +71,7 @@
               />
             </li>
             <li>
-              <label for="owning_institution">Owning institution:</label>
+              <label for="owning_institution" class="required">Owning institution:</label>
               <AvSelect
                 id="owning_institution"
                 field="owning_institution"
@@ -79,16 +79,17 @@
               />
             </li>
             <li>
-              <label for="scan_site">Scan site:</label>
+              <label for="scan_site" class="required">Scan site:</label>
               <AvSelect id="scan_site" field="scan_site" v-model="entry.scan_site" />
             </li>
           </ol>
         </div>
       </fieldset>
       <fieldset class="action">
-        <button class="btn btn-primary" :disabled="!canSave" @click="save">
+      <button class="btn btn-primary" type="button" :disabled="!selectedCount || saving || !owningInstitution || !scanSite" @click="create">
           {{ saving ? "Saving…" : "Save entry" }}
         </button>
+        <p v-if="record && (!entry.owning_institution || !entry.scan_site)" class="hint required">Owning institution and scan site are required.</p>
       </fieldset>
     </div>
   </div>
@@ -235,5 +236,8 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 2em;
+}
+.required {
+  color: #CC0000;
 }
 </style>
