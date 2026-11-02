@@ -1,4 +1,8 @@
 <template>
+  <SaveNotice :token="savedAt">
+      <strong>{{ summary.created }} {{ summary.created === 1 ? "entry" : "entries" }} created.</strong>
+      {{ bulkNoticeExtra }}
+  </SaveNotice>
   <div>
     <h2>Add entries in bulk</h2>
 
@@ -80,6 +84,7 @@ export default {
     return {
       owningInstitution: null,
       scanSite: null,
+      savedAt: null,
       tnText: "",
       barcodeText: "",
       rows: [],
@@ -131,6 +136,7 @@ export default {
       this.loading = true;
       this.error = null;
       this.summary = { created: 0, skipped: 0, failed: 0 };
+      this.savedAt = null;
       try {
         const body = await previewEntries({ items: this.items });
         this.rows = (body.results || []).map((r) => ({
@@ -157,6 +163,7 @@ export default {
         });
 
         this.summary = body.summary || { created: 0, skipped: 0, failed: 0 };
+        this.savedAt = Date.now();
 
         // fold results back into the rows they came from
         const byBiblio = {};
@@ -182,6 +189,7 @@ export default {
       this.barcodeText = "";
       this.rows = [];
       this.summary = { created: 0, skipped: 0, failed: 0 };
+      this.savedAt = null;
       this.error = null;
     },
   },

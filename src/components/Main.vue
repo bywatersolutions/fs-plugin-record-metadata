@@ -1,6 +1,9 @@
 <template>
   <div class="fs-record-metadata">
-    <NavBar :current="view" @navigate="view = $event" />
+    <NavBar :current="view" @navigate="onNavigate" />
+    <SaveNotice :token="savedNotice && savedNotice.at">
+      <strong>Saved.</strong> {{ savedNoticeText }}
+    </SaveNotice>
     <SearchView
       v-if="view === 'search'"
       :search-type="searchType"
@@ -24,7 +27,6 @@
       @search="onSearch"
       @saved="onSaved"
       @step="onStep"
-      @cancel="closeEntry"
     />
     <ScanningViewTwo
       v-if="view === 'create2'"
@@ -34,7 +36,6 @@
       @search="onSearch"
       @saved="onSaved"
       @step="onStep"
-      @cancel="closeEntry"
     />
     <ProblemsView v-if="view === 'problems'" />
     <AdminView v-if="view === 'admin'" />
@@ -54,13 +55,21 @@ export default {
   name: "Main",
   components: { SearchView, CreateView, BulkCreateView, ScanningViewOne, ScanningViewTwo, ProblemsView, AdminView },
   data() {
-    return { view: "search", entry: null, searchType: "biblionumber", searchTerm: "", };
+    return { view: "search", entry: null, searchType: "biblionumber", searchTerm: "", savedNotice: null };
+  },
+  computed: {
+    savedNoticeText() {
+      if (!this.savedNotice) return "";
+      return this.savedNotice.dtn
+        ? `DTN ${this.savedNotice.dtn} has been updated.`
+        : `Entry ${this.savedNotice.entry_id} has been updated.`;
+    },
   },
   methods: {
     onSearch({ type, term }) {
-    console.log("Main.onSearch", type, term);
       this.searchType = type;
       this.searchTerm = term;
+      this.savedNotice = null;
     },
     openEntry(entry) {
       this.entry = entry;
@@ -68,13 +77,14 @@ export default {
     },
     onSaved(updated) {
       this.entry = updated;
+      this.savedNotice = { at: Date.now(), dtn: updated.dtn, entry_id: updated.entry_id };
     },
     onStep(n) {
       this.view = n === 2 ? "create2" : "create";
     },
-    closeEntry() {
-      this.entry = null;
-      this.view = "search";
+    onNavigate(view) {
+      this.view = view;
+      this.savedNotice = null;
     },
   },
 };

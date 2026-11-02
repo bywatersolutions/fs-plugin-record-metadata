@@ -1,5 +1,8 @@
 <template>
   <div>
+    <SaveNotice :token="savedAt">
+      <strong>Roles saved.</strong>
+    </SaveNotice>
     <h2>Roles</h2>
     <p>
       Enter borrowernumbers separated by commas or spaces. Anyone not listed
@@ -7,7 +10,6 @@
     </p>
 
     <p v-if="error" class="fsrm-error">{{ error }}</p>
-    <p v-if="savedAt" class="fsrm-saved">Roles saved.</p>
 
     <fieldset class="rows">
       <ol>

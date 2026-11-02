@@ -186,7 +186,7 @@ export default {
     searchType: { type: String, default: "biblionumber" },
     searchTerm: { type: String, default: "" },
   },
-  emits: ["saved", "step", "search"],
+  emits: ["saved", "step", "search", "cancel"],
   data() {
     return {
       fieldKeys: [

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <SaveNotice :token="savedAt">
+      <strong>Saved.</strong> {{ savedLabel }}
+    </SaveNotice>
       <form @submit.prevent="search" class="fsrm-search">
       <select v-model="localSearchType">
         <option value="biblionumber">TN (biblionumber)</option>
@@ -80,7 +83,6 @@
             {{ saving ? "Saving…" : nextStepLabel }}
           </button>
           <p v-if="error" class="error" role="alert">{{ error }}</p>
-          <span v-if="savedAt" class="fsrm-saved">Saved.</span>
         </div>
       </fieldset>
     </div>
@@ -153,6 +155,14 @@ export default {
   },
   created() {
     if (this.entry) this.select(this.entry);
+  },
+  computed: {
+    savedLabel() {
+      if (!this.selected) return "";
+      return this.selected.dtn
+        ? `DTN ${this.selected.dtn} has been updated.`
+        : `Entry ${this.selected.entry_id} has been updated.`;
+    },
   },
   methods: {
     async search() {

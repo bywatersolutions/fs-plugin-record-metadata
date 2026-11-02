@@ -1,5 +1,9 @@
 <template>
   <div>
+    <SaveNotice :token="saved">
+      <strong>Entry created.</strong>
+      {{ saved.dtn ? `DTN ${saved.dtn} has been saved.` : `Entry ${saved.entry_id} has been saved — no DTN assigned.` }}
+    </SaveNotice>
     <form @submit.prevent="lookup()" class="fsrm-search">
       <select v-model="localSearchType">
         <option value="biblionumber">TN (biblionumber)</option>
@@ -85,7 +89,6 @@
         <button class="btn btn-primary" :disabled="!canSave" @click="save">
           {{ saving ? "Saving…" : "Save entry" }}
         </button>
-        <span v-if="saved" class="fsrm-saved">Entry {{ saved }} created.</span>
       </fieldset>
     </div>
   </div>
@@ -204,10 +207,14 @@ export default {
           volume_description: this.entry.volume_description || null,
           scan_site: this.entry.scan_site || null,
         };
-
         const created = await createEntry(payload);
-        this.saved = created.entry_id;
+        this.saved = created;
         this.entry = this.blankEntry();
+        this.$nextTick(() => {
+          if (this.$refs.notice) {
+            this.$refs.notice.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        });
       } catch (e) {
         if (e.status === 409) this.dtnStatus = "taken";
         this.error = e.message;
