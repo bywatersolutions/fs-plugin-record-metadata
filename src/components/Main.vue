@@ -50,6 +50,7 @@ import ScanningViewOne from "./ScanningViewOne.vue";
 import ScanningViewTwo from "./ScanningViewTwo.vue";
 import ProblemsView from "./ProblemsView.vue";
 import AdminView from "./AdminView.vue";
+import { isDirty } from "../dirty";
 
 export default {
   name: "Main",
@@ -83,6 +84,9 @@ export default {
       this.view = n === 2 ? "create2" : "create";
     },
     onNavigate(view) {
+      if (isDirty() && !window.confirm("You have unsaved changes. Leave this page and lose them?")) {
+        return;
+      }
       this.view = view;
       this.savedNotice = null;
     },

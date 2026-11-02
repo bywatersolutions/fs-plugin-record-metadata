@@ -100,6 +100,7 @@
 
 <script>
 import ProblemsModal from "./ProblemsModal.vue";
+import { setDirtyCheck } from "../dirty";
 import { getEntries, updateEntry } from "../api";
 
 export default {
@@ -133,6 +134,7 @@ export default {
       error: null,
       showProblemsModal: false,
       editingProblemId: null,
+      baseline: null,
     };
   },
   watch: {
@@ -156,12 +158,21 @@ export default {
   created() {
     if (this.entry) this.select(this.entry);
   },
+  mounted() {
+    this.unregisterDirty = setDirtyCheck(() => this.isFormDirty);
+  },
+  unmounted() {
+    if (this.unregisterDirty) this.unregisterDirty();
+  },
   computed: {
     savedLabel() {
       if (!this.selected) return "";
       return this.selected.dtn
         ? `DTN ${this.selected.dtn} has been updated.`
         : `Entry ${this.selected.entry_id} has been updated.`;
+    },
+    isFormDirty() {
+      return this.baseline !== null && JSON.stringify(this.form) !== this.baseline;
     },
   },
   methods: {
@@ -172,6 +183,7 @@ export default {
       this.error = null;
       this.entries = [];
       this.selected = null;
+      this.baseline = null;
       this.savedAt = null;
       try {
         this.entries = await getEntries({ [this.localSearchType]: this.localSearchTerm });
@@ -195,6 +207,7 @@ export default {
       }
       this.form = form;
       this.names = names;
+      this.baseline = JSON.stringify(this.form);
     },
 
     buildPayload() {
