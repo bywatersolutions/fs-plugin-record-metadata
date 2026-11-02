@@ -10,6 +10,10 @@
           {{ record.publication_date }}
         </li>
         <li>
+          <span class="label">Physical description:</span>
+          {{ record.physical_description }}
+        </li>
+        <li>
           <span class="label">Language:</span>
           {{ record.lang }}
         </li>
@@ -21,6 +25,8 @@
         <thead>
           <tr>
             <th>Online link (856u)</th>
+            <th>Limb ID (856f)</th>
+            <th>DJS (856w)</th>
             <th>(856y)</th>
             <th>(856x)</th>
           </tr>
@@ -28,9 +34,15 @@
         <tbody>
           <tr v-for="(link, idx) in record.online_links" :key="idx">
             <td>
-              <a :href="link.url" target="_blank" rel="noopener">{{
+              <a v-if="link.url" :href="link.url" target="_blank" rel="noopener">{{
                 link.url
               }}</a>
+            </td>
+            <td>
+                {{ link.f856 }}
+            </td>
+            <td>
+                {{ link.w856 }}
             </td>
             <td>
                 {{ link.y856 }}

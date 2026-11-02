@@ -53,11 +53,13 @@
         name="fields"
         :form="form"
         :names="names"
+        :record="record"
         :selected="selected"
         :edit-problem="editProblem"
         :add-problem="addProblem"
       ></slot>
 
+      <RecordDetails :record="record" />
       <fieldset class="action">
         <p v-if="!$canWrite()" class="hint">You have read-only access.</p>
         <div class="btn-toolbar">
@@ -101,7 +103,7 @@
 <script>
 import ProblemsModal from "./ProblemsModal.vue";
 import { setDirtyCheck } from "../dirty";
-import { getEntries, updateEntry } from "../api";
+import { getEntries, updateEntry, lookupRecord } from "../api";
 
 export default {
   name: "ScanningForm",
@@ -135,6 +137,7 @@ export default {
       showProblemsModal: false,
       editingProblemId: null,
       baseline: null,
+      record: null,
     };
   },
   watch: {
@@ -170,6 +173,9 @@ export default {
       return this.selected.dtn
         ? `DTN ${this.selected.dtn} has been updated.`
         : `Entry ${this.selected.entry_id} has been updated.`;
+    },
+    link856() {
+      return (this.record && this.record.online_links && this.record.online_links[0]) || null;
     },
     isFormDirty() {
       return this.baseline !== null && JSON.stringify(this.form) !== this.baseline;
@@ -208,8 +214,18 @@ export default {
       this.form = form;
       this.names = names;
       this.baseline = JSON.stringify(this.form);
+      if (!this.record || this.record.biblionumber !== entry.biblionumber) {
+        this.loadRecord(entry);
+      }
     },
-
+    async loadRecord(entry) {
+      this.record = null;
+      try {
+        this.record = await lookupRecord({ biblionumber: entry.biblionumber });
+      } catch (e) {
+          // nothing
+      }
+    },
     buildPayload() {
       const payload = {};
       for (const key of this.fieldKeys) {

@@ -379,11 +379,17 @@ sub get_record_details {
         last if length $pub_date;
     }
 
+    my $physical_description = join ' ', grep { defined && length }
+    map { $_->subfield('a') } $record->field('300');
+
     my @online_links;
     for my $field ( $record->field('856') ) {
         my $url = $field->subfield('u');
         my $x856 = $field->subfield('x');
         my $y856 = $field->subfield('y');
+        my $f856 = $field->subfield('f');
+        my $w856 = $field->subfield('w');
+
         next unless defined $url && length $url;
         my $label = $field->subfield('y')      # link text
                  // $field->subfield('3')      # materials specified
@@ -392,6 +398,8 @@ sub get_record_details {
             url   => $url,
             x856  => $x856,
             y856  => $y856,
+            f856  => $f856,
+            w856  => $w856,
             label => ( defined $label && length $label ) ? $label : $url,
         };
     }
@@ -421,6 +429,7 @@ sub get_record_details {
         title            => $title,
         author           => $author,
         publication_date => $pub_date,
+        physical_description => $physical_description,
         lang             => $lang,
         online_links     => \@online_links,
         items            => [
