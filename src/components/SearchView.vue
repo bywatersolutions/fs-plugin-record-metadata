@@ -126,7 +126,7 @@ export default {
           { data: "access", defaultContent: "" },
           { data: "callnumber", defaultContent: "" },
           { data: "barcodes", defaultContent: "" },
-          { data: "md_date", render: iconToggle },
+          { data: null, orderable: false, defaultContent: '<i class="fa fa-check fsrm-flag-yes" aria-hidden="true"></i>' },
           { data: "scan_date", render: iconToggle },
           { data: "audit_date_1", render: iconToggle },
           { data: "audit_date_2", render: iconToggle },

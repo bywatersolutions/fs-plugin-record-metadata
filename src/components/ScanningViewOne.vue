@@ -73,10 +73,6 @@
 
             <ol>
               <li>
-                <label for="md_date">Metadata complete date:</label>
-                <DateField id="md_date" label="Metadata complete date" v-model="form.md_date" />
-              </li>
-              <li>
                 <label for="scan_site">Scan site:</label>
                 <AvSelect id="scan_site" field="scan_site" v-model="form.scan_site" />
               </li>
