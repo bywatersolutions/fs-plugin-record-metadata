@@ -13,6 +13,7 @@
   >
     <template #fields="{ form, names, selected, editProblem, addProblem }">
       <fieldset  class="rows">
+        <h2>Digitial title number: {{ selected.dtn }}</h2>
         <div id="scanform_step2">
             <ol>
               <AccessLevel :value="selected.access" :source="selected.access_source" />

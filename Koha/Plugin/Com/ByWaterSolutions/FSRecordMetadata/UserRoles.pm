@@ -13,7 +13,7 @@ use Exporter 'import';
 our @EXPORT_OK = qw( roles user_access list_users save_users );
 
 my %ROLES = (
-    admin      => { label => 'Admin',      views => [qw( search new bulknew create create2 problems reports admin )] },
+    admin      => { label => 'Admin',      views => [qw( search new bulknew create create2 problems reports admin delete )] },
     metadata   => { label => 'Metadata',   views => [qw( search new bulknew create )] },
     scanning   => { label => 'Scanning',   views => [qw( search create problems reports )] },
     processing => { label => 'Processing', views => [qw( search create2 problems reports )] },

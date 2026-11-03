@@ -4,9 +4,10 @@
       {{ bulkNoticeExtra }}
   </SaveNotice>
   <div>
-    <h2>Add entries in bulk</h2>
 
-    <fieldset class="rows fs-bulk-form">
+    <fieldset class="rows">
+    <h2>Add entries in bulk</h2>
+      <div class="fs-bulk-form">
       <ol>
         <li>
           <label for="bulk_owning_institution" class="required">Owning institution:</label>
@@ -51,6 +52,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
     </fieldset>
 
     <fieldset class="action">

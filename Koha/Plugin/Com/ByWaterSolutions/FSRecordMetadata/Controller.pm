@@ -193,6 +193,29 @@ sub update_entry {
     };
 }
 
+sub delete_entry {
+    my $c = shift->openapi->valid_input or return;
+
+    my $entry_id = $c->validation->param('entry_id');
+
+    return try {
+        my $plugin = Koha::Plugin::Com::ByWaterSolutions::FSRecordMetadata->new;
+
+        return $c->render( status => 403, openapi => { error => "Not permitted" } )
+            unless $plugin->access_for_current_user->{is_admin};
+
+        my $deleted = $plugin->delete_entry($entry_id);
+
+        return $c->render( status => 404, openapi => { error => "Entry not found" } )
+            unless $deleted;
+
+        return $c->render( status => 204, openapi => q{} );
+    }
+    catch {
+        return $c->render( status => 500, openapi => { error => "Something went wrong: $_" } );
+    };
+}
+
 sub list_problems {
     my $c = shift->openapi->valid_input or return;
     my $q = $c->validation->param('q');

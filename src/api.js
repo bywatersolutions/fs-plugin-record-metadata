@@ -52,6 +52,9 @@ export const previewEntries = (body) =>
 export const updateEntry = (id, body) =>
   apiFetch(`/entries/${id}`, { method: 'PUT', body: JSON.stringify(body) }).then((r) => r.json());
 
+export const deleteEntry = (id) =>
+  apiFetch(`/entries/${id}`, { method: "DELETE" });
+
 export const checkDtn = (dtn) =>
   apiFetch(`/entries/check-dtn?${qs({ dtn })}`).then((r) => r.json());
 

@@ -291,6 +291,12 @@ sub create_entries {
         $self->_tables, $params );
 }
 
+sub delete_entry {
+    my ( $self, $entry_id ) = @_;
+    return Koha::Plugin::Com::ByWaterSolutions::FSRecordMetadata::Entries::delete_entry(
+        $self->_tables, $entry_id );
+}
+
 sub preview_entries {
     my ( $self, $params ) = @_;
     return Koha::Plugin::Com::ByWaterSolutions::FSRecordMetadata::Entries::preview_entries(

@@ -35,6 +35,7 @@ export default {
         { id: "bulknew", label: "Bulk add entry" },
         { id: "create", label: "Scanning" },
         { id: "create2", label: "Processing"},
+        { id: "delete", label: "Delete entry" },
         { id: "problems", label: "Problems" },
         { id: "reports", label: "Queues/reports" },
         { id: "admin", label: "Admin" },

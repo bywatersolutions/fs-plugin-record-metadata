@@ -158,6 +158,22 @@
             "x-koha-authorization": {
                 "permissions": { "editcatalogue": "edit_catalogue" }
             }
+        },
+	"delete": {
+            "x-mojo-to": "Com::ByWaterSolutions::FSRecordMetadata::Controller#delete_entry",
+            "operationId": "fsrmDeleteEntry",
+            "tags": ["fsrecordmetadata"],
+            "produces": ["application/json"],
+            "parameters": [
+                { "name": "entry_id", "in": "path", "required": true, "type": "integer" }
+            ],
+            "responses": {
+                "204": { "description": "Entry deleted" },
+                "403": { "description": "Not permitted", "schema": { "type": "object", "properties": { "error": { "type": "string" } } } },
+                "404": { "description": "Entry not found", "schema": { "type": "object", "properties": { "error": { "type": "string" } } } },
+                "500": { "description": "Internal server error", "schema": { "type": "object", "properties": { "error": { "type": "string" } } } }
+            },
+            "x-koha-authorization": { "permissions": { "catalogue": "1" } }
         }
     },
     "/entries/bulk": {

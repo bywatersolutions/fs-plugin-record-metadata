@@ -439,3 +439,15 @@ sub update_entry {
 
     return $dbh->do( $sql, undef, @binds, $entry_id );
 }
+
+sub delete_entry {
+    my ( $tables, $entry_id ) = @_;
+
+    my $table = $tables->{entries};
+    my $dbh   = C4::Context->dbh;
+
+    my $sth = $dbh->prepare("DELETE FROM `$table` WHERE entry_id = ?");
+    $sth->execute($entry_id);
+
+    return $sth->rows;
+}

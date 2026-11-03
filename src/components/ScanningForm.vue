@@ -60,7 +60,6 @@
       ></slot>
 
       <fieldset class="action">
-        <h2>Digitial title number: {{ selected.dtn }}</h2>
         <p v-if="!$canWrite()" class="hint">You have read-only access.</p>
         <div class="btn-toolbar">
           <button
@@ -288,3 +287,8 @@ export default {
   },
 };
 </script>
+<style>
+    fieldset.results {
+       margin-bottom: 1em;
+    }
+</style>

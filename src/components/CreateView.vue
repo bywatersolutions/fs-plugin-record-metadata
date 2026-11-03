@@ -23,66 +23,68 @@
 
     <div v-if="record">
       <RecordDetails :record="record" />
+      <fieldset class="rows">
       <h2>Details</h2>
-      <fieldset class="rows results">
-        <div>
-          <ol>
-            <li>
-              <label for="extension">Extension:</label>
-              <input id="extension" v-model.trim="entry.extension" />
-              <div class="hint">
-                Generated DTN from TN and Extensions with _ between each piece
-              </div>
-            </li>
-          </ol>
-        </div>
-        <div>
-          <ol>
-            <li>
-              <label for="dtn">Digital title number:</label>
-              <input id="dtn" :value="dtn" readonly disabled />
-              <span v-if="dtnStatus === 'checking'" class="hint"
-                >Checking…</span
-              >
-              <span
-                v-else-if="dtnStatus === 'taken'"
-                class="fsrm-error text-danger fw-bold"
-              >
-                DTN is already in use, must be unique.
-              </span>
-              <span
-                v-else-if="dtnStatus === 'available'"
-                class="fsrm-ok text-success fw-bold"
-              >
-                Available</span
-              >
-              <span
-                v-else-if="dtnStatus === 'error'"
-                class="fsrm-error text-danger fw-bold"
-              >
-                Could not verify</span
-              >
-            </li>
-            <li>
-              <label for="volume_description">Volume description:</label>
-              <input
-                id="volume_description"
-                v-model.trim="entry.volume_description"
-              />
-            </li>
-            <li>
-              <label for="owning_institution" class="required">Owning institution:</label>
-              <AvSelect
-                id="owning_institution"
-                field="owning_institution"
-                v-model="entry.owning_institution"
-              />
-            </li>
-            <li>
-              <label for="scan_site" class="required">Scan site:</label>
-              <AvSelect id="scan_site" field="scan_site" v-model="entry.scan_site" />
-            </li>
-          </ol>
+        <div class="results">
+            <div>
+              <ol>
+                <li>
+                  <label for="extension">Extension:</label>
+                  <input id="extension" v-model.trim="entry.extension" />
+                  <div class="hint">
+                    Generated DTN from TN and Extensions with _ between each piece
+                  </div>
+                </li>
+              </ol>
+            </div>
+            <div>
+              <ol>
+                <li>
+                  <label for="dtn">Digital title number:</label>
+                  <input id="dtn" :value="dtn" readonly disabled />
+                  <span v-if="dtnStatus === 'checking'" class="hint"
+                    >Checking…</span
+                  >
+                  <span
+                    v-else-if="dtnStatus === 'taken'"
+                    class="fsrm-error text-danger fw-bold"
+                  >
+                    DTN is already in use, must be unique.
+                  </span>
+                  <span
+                    v-else-if="dtnStatus === 'available'"
+                    class="fsrm-ok text-success fw-bold"
+                  >
+                    Available</span
+                  >
+                  <span
+                    v-else-if="dtnStatus === 'error'"
+                    class="fsrm-error text-danger fw-bold"
+                  >
+                    Could not verify</span
+                  >
+                </li>
+                <li>
+                  <label for="volume_description">Volume description:</label>
+                  <input
+                    id="volume_description"
+                    v-model.trim="entry.volume_description"
+                  />
+                </li>
+                <li>
+                  <label for="owning_institution" class="required">Owning institution:</label>
+                  <AvSelect
+                    id="owning_institution"
+                    field="owning_institution"
+                    v-model="entry.owning_institution"
+                  />
+                </li>
+                <li>
+                  <label for="scan_site" class="required">Scan site:</label>
+                  <AvSelect id="scan_site" field="scan_site" v-model="entry.scan_site" />
+                </li>
+              </ol>
+            </div>
         </div>
       </fieldset>
       <fieldset class="action">

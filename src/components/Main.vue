@@ -37,6 +37,7 @@
       @saved="onSaved"
       @step="onStep"
     />
+    <DeleteView v-if="view === 'delete'" />
     <ProblemsView v-if="view === 'problems'" />
     <AdminView v-if="view === 'admin'" />
   </div>
@@ -50,11 +51,12 @@ import ScanningViewOne from "./ScanningViewOne.vue";
 import ScanningViewTwo from "./ScanningViewTwo.vue";
 import ProblemsView from "./ProblemsView.vue";
 import AdminView from "./AdminView.vue";
+import DeleteView from "./DeleteView.vue";
 import { isDirty } from "../dirty";
 
 export default {
   name: "Main",
-  components: { SearchView, CreateView, BulkCreateView, ScanningViewOne, ScanningViewTwo, ProblemsView, AdminView },
+  components: { SearchView, CreateView, BulkCreateView, ScanningViewOne, ScanningViewTwo, DeleteView, ProblemsView, AdminView },
   data() {
     return { view: "search", entry: null, searchType: "biblionumber", searchTerm: "", savedNotice: null };
   },
