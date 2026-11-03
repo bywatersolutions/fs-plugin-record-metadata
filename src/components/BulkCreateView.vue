@@ -54,6 +54,7 @@
     </fieldset>
 
     <fieldset class="action">
+      <p v-if="!owningInstitution || !scanSite" class="hint alert alert-danger">Owning institution and scan site are required.</p>
       <button class="btn btn-default" type="button" :disabled="!itemCount || loading" @click="preview">
         {{ loading ? "Checking…" : `Review ${itemCount} record${itemCount === 1 ? "" : "s"}` }}
       </button>
@@ -61,7 +62,6 @@
         {{ saving ? "Creating…" : `Create ${selectedCount} entr${selectedCount === 1 ? "y" : "ies"}` }}
       </button>
       <button v-if="rows.length" class="btn btn-default" type="button" @click="reset">Clear</button>
-      <p v-if="!owningInstitution || !scanSite" class="hint required">Owning institution and scan site are required.</p>
     </fieldset>
 
 

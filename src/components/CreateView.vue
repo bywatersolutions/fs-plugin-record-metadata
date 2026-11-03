@@ -86,10 +86,10 @@
         </div>
       </fieldset>
       <fieldset class="action">
-      <button class="btn btn-primary" type="button" :disabled="!selectedCount || saving || !owningInstitution || !scanSite" @click="create">
+        <p v-if="record && (!entry.owning_institution || !entry.scan_site)" class="hint alert alert-danger">Owning institution and scan site are required.</p>
+        <button class="btn btn-primary" :disabled="!canSave" @click="save">
           {{ saving ? "Saving…" : "Save entry" }}
         </button>
-        <p v-if="record && (!entry.owning_institution || !entry.scan_site)" class="hint required">Owning institution and scan site are required.</p>
       </fieldset>
     </div>
   </div>
@@ -126,8 +126,15 @@ export default {
         .filter((v) => v !== null && v !== undefined && String(v).trim() !== "")
         .join("_");
     },
-    canSave() {
-      return !!this.record && this.dtnStatus === "available" && !this.saving;
+  canSave() {
+      return (
+        !!this.record &&
+        !!this.entry &&
+        this.dtnStatus === "available" &&
+        !this.saving &&
+        !!this.entry.owning_institution &&
+        !!this.entry.scan_site
+      );
     },
   },
   watch: {
