@@ -85,7 +85,8 @@
               </li>
               <li>
                 <label for="pages_online">Loaded pages #:</label>
-                <input type="number" id="pages_online" v-model.trim="form.pages_online" />
+                <input type="number" min="0" id="pages_online" v-model.trim="form.pages_online" 
+                @input="form.pages_online = form.pages_online < 0 ? 0 : form.pages_online" />
               </li>
             </ol>
 

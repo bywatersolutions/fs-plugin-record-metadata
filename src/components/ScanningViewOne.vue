@@ -70,7 +70,8 @@
               </li>
               <li>
                 <label for="scanned_image_count">Scanned images count:</label>
-                <input type="number" id="scanned_image_count" v-model.trim="form.scanned_image_count" />
+                <input type="number" min="0" id="scanned_image_count" v-model.trim="form.scanned_image_count" 
+                @input="form.scanned_image_count = form.scanned_image_count < 0 ? 0 : form.scanned_image_count" />
               </li>
               <li style="margin-top: 1em">
                 <label for="image_auditor_1_by">Image auditor 1:</label>
@@ -98,7 +99,8 @@
               </li>
               <li style="margin-top: 1em">
                 <label for="new_scanned_image_count">New scanned images count:</label>
-                <input type="number"  id="new_scanned_image_count" v-model="form.new_scanned_image_count" />
+                <input type="number" min="0" id="new_scanned_image_count" v-model="form.new_scanned_image_count"
+                @input="form.new_scanned_image_count = form.new_scanned_image_count < 0 ? 0 : form.new_scanned_image_count" />
               </li>
               <li>
                 <label for="images_resent_by">Images resent by:</label>

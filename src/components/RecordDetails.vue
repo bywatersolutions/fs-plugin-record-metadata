@@ -1,7 +1,7 @@
 <template>
   <fieldset class="rows results" v-if="record">
     <div>
-      <h3>Bibliographic info.</h3>
+      <h3>Bibliographic information</h3>
       <ol>
         <li><span class="label">Title:</span> {{ record.title }}</li>
         <li><span class="label">Author:</span> {{ record.author }}</li>
@@ -73,7 +73,7 @@
       </table>
     </div>
     <div>
-      <h3>Item info.</h3>
+      <h3>Item information</h3>
       <table
         class="fsrm-items table table-success table-responsive"
         v-if="record.items && record.items.length"
