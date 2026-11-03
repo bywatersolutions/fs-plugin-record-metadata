@@ -3,14 +3,6 @@
     <SaveNotice :token="deletedAt">
       <strong>Deleted.</strong> {{ deletedLabel }}
     </SaveNotice>
-
-    <h2>Delete entries</h2>
-    <p>
-      Deleting an entry also deletes its problems. Deletions are permanent,
-      are not logged, and cannot be restored. Data written to the MARC record
-      is left in place.
-    </p>
-
     <form @submit.prevent="search" class="fsrm-search">
       <select v-model="searchType">
         <option value="biblionumber">TN (biblionumber)</option>
@@ -24,66 +16,95 @@
 
     <p v-if="error" class="fsrm-error">{{ error }}</p>
     <p v-if="searched && !entries.length && !loading">No entries found.</p>
-
-    <table v-if="entries.length" class="table table-responsive">
-      <thead>
-        <tr>
-          <th>DTN</th>
-          <th>TN</th>
-          <th>Title</th>
-          <th>Access</th>
-          <th>Problems</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="e in entries" :key="e.entry_id">
-          <td>{{ e.dtn }}</td>
-          <td>{{ e.biblionumber }}</td>
-          <td>{{ e.title }}</td>
-          <td>{{ e.access }}</td>
-          <td>{{ problemCount(e) }}</td>
-          <td>
-            <button class="btn btn-danger" type="button" @click="askDelete(e)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div v-if="pending" class="fsrm-modal-backdrop">
-      <div class="fsrm-modal">
-        <h3>Delete this entry?</h3>
-        <p>
-          <strong>DTN {{ pending.dtn || "(none)" }}</strong>
-          — TN {{ pending.biblionumber }} — {{ pending.title }}
+    <fieldset class="rows">
+        <h2>Delete entries</h2>
+        <p class="alert alert-warning">
+          Deleting an entry also deletes its problems. Deletions are permanent
+          and cannot be restored.
         </p>
-        <p>
-          This deletes the entry and its {{ problemCount(pending) }}
-          problem(s). It is permanent, is not logged, and cannot be undone.
-        </p>
-        <p v-if="deleteError" class="fsrm-error">{{ deleteError }}</p>
-        <div class="btn-toolbar">
-          <button
-            class="btn btn-danger"
-            type="button"
-            :disabled="deleting"
-            @click="doDelete"
-          >
-            {{ deleting ? "Deleting…" : "Delete permanently" }}
-          </button>
-          <button
-            class="btn btn-default"
-            type="button"
-            :disabled="deleting"
-            @click="pending = null"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
+
+
+        <table v-if="entries.length" class="table table-responsive table-success">
+          <thead>
+            <tr>
+              <th>DTN</th>
+              <th>TN</th>
+              <th>Title</th>
+              <th>Access</th>
+              <th>Problems</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="e in entries" :key="e.entry_id">
+              <td>{{ e.dtn }}</td>
+              <td>{{ e.biblionumber }}</td>
+              <td>{{ e.title }}</td>
+              <td>{{ e.access }}</td>
+              <td>{{ problemCount(e) }}</td>
+              <td>
+                <button class="btn btn-danger" type="button" @click="askDelete(e)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+            <div
+              v-if="pending"
+              class="modal show"
+              style="display: block"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="fsrmDeleteModalLabel"
+              aria-modal="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title" id="fsrmDeleteModalLabel">Delete this entry?</h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      aria-label="Close"
+                      @click="pending = null"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <strong>DTN {{ pending.dtn || "(none)" }}</strong>
+                      — TN {{ pending.biblionumber }} — {{ pending.title }}
+                    </p>
+                    <p class="alert alert-warning">
+                      This deletes the entry and its {{ problemCount(pending) }}
+                      problem(s). This is permanent  and cannot be undone.
+                    </p>
+                    <p v-if="deleteError" class="fsrm-error">{{ deleteError }}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      class="btn btn-primary"
+                      type="button"
+                      :disabled="deleting"
+                      @click="doDelete"
+                    >
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                      {{ deleting ? "Deleting…" : "Delete permanently" }}
+                    </button>
+                    <button
+                      class="btn btn-secondary"
+                      type="button"
+                      :disabled="deleting"
+                      @click="pending = null"
+                    >
+                      <i class="fa fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="pending" class="modal-backdrop fade show"></div>
+    </fieldset>
   </div>
 </template>
 

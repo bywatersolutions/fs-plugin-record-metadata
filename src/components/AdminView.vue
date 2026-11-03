@@ -3,15 +3,15 @@
     <SaveNotice :token="savedAt">
       <strong>Roles saved.</strong>
     </SaveNotice>
-    <h2>Roles</h2>
-    <p>
-      Enter borrowernumbers separated by commas or spaces. Anyone not listed
-      here has read-only access to the plugin.
-    </p>
 
     <p v-if="error" class="fsrm-error">{{ error }}</p>
 
     <fieldset class="rows">
+      <h2>Roles</h2>
+      <p class="alert alert-warning">
+        Enter borrowernumbers separated by commas or spaces. Anyone not listed
+        here has read-only access to the plugin.
+      </p>
       <ol>
         <li v-for="role in roles" :key="role.id">
           <label :for="'role_' + role.id">{{ role.label }}:</label>
