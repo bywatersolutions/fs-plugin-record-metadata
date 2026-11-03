@@ -18,6 +18,8 @@
           {{ record.lang }}
         </li>
       </ol>
+      <hr />
+      <h3>Online links</h3>
       <table
         class="table table-success table-responsive"
         v-if="record.online_links && record.online_links.length"
@@ -53,24 +55,6 @@
           </tr>
         </tbody>
       </table>
-      <table class="table table-success table-responsive">
-        <thead>
-          <tr>
-            <th>Privacy (998$f)</th>
-            <th>Contract (542$r)</th>
-            <th>Ex 108 (506$a)</th>
-            <th>Copyright (542$l)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ record.privacy_998f }}</td>
-            <td>{{ record.contract_542r }}</td>
-            <td>{{ record.ex_108 }}</td>
-            <td>{{ record.copyright_542l }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
     <div>
       <h3>Item information</h3>
@@ -96,6 +80,30 @@
         </tbody>
       </table>
       <p v-else><em>No configured items attached to this record. Some items maye be hidden via the configuration page.</em></p>
+      <hr />
+      <h3>Rights</h3>
+      <ol class="fsrm-rights">
+        <li>
+          <span class="label">Privacy (998$f):</span>
+          <div v-for="(v, i) in record.privacy_998f" :key="i">{{ v }}</div>
+          <span v-if="!(record.privacy_998f && record.privacy_998f.length)">—</span>
+        </li>
+        <li>
+          <span class="label">Contract (542$r):</span>
+          <div v-for="(v, i) in record.contract_542r" :key="i">{{ v }}</div>
+          <span v-if="!(record.contract_542r && record.contract_542r.length)">—</span>
+        </li>
+        <li>
+          <span class="label">Ex 108 (506$a):</span>
+          <div v-for="(v, i) in record.ex_108" :key="i">{{ v }}</div>
+          <span v-if="!(record.ex_108 && record.ex_108.length)">—</span>
+        </li>
+        <li>
+          <span class="label">Copyright (542$l):</span>
+          <div v-for="(v, i) in record.copyright_542l" :key="i">{{ v }}</div>
+          <span v-if="!(record.copyright_542l && record.copyright_542l.length)">—</span>
+        </li>
+      </ol>
     </div>
   </fieldset>
 </template>
@@ -108,3 +116,16 @@ export default {
   },
 };
 </script>
+<style>
+.fs-record-metadata .fsrm-rights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.fs-record-metadata .fsrm-rights > li {
+  padding: 0.4em 0.6em;
+}
+.fs-record-metadata .fsrm-rights > li {
+  background: #eee;
+}
+</style>

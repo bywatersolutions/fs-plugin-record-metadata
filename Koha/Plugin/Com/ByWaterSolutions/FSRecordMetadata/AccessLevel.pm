@@ -115,7 +115,7 @@ sub resolve_access_level {
 sub access_control_fields {
     my ($biblio) = @_;
 
-    my %out = map { $_ => '' } keys %ACCESS_CONTROL_FIELDS;
+    my %out = map { $_ => [] } keys %ACCESS_CONTROL_FIELDS;
     return \%out unless $biblio;
 
     my $record = eval { $biblio->metadata->record };
@@ -129,7 +129,7 @@ sub access_control_fields {
                 push @values, $value if defined $value && length $value;
             }
         }
-        $out{$key} = join '; ', @values;
+        $out{$key} = \@values;
     }
 
     return \%out;
