@@ -1,6 +1,10 @@
 <template>
   <div>
     <p v-if="error" class="fsrm-error">{{ error }}</p>
+    <p v-if="localFilter" class="fsrm-filter-note alert alert-warning">
+      Showing problem <strong>{{ localFilter.problem_id }}</strong>.
+      <a href="#" @click.prevent="clearFilter">Show all problems</a>
+    </p>
     <DataTable ref="table" :options="tableOptions" class="display" width="100%">
       <thead>
         <tr>
@@ -46,7 +50,13 @@ export default {
       error: null,
       editingProblem: null,
       table: null,
+      localFilter: null,
+      tableKey: 0,
+      autoOpen: false,
     };
+  },
+  props: {
+    filter: { type: Object, default: null },
   },
   methods: {
     openProblem(row) {
@@ -64,6 +74,20 @@ export default {
     reloadTable() {
       const dt = this.$refs.table && this.$refs.table.dt;
       if (dt && dt.ajax) dt.ajax.reload(null, false);
+    },
+    clearFilter() {
+      this.localFilter = null;
+      this.reloadTable();
+    },
+  },
+  watch: {
+    filter: {
+      immediate: true,
+      handler(val) {
+        this.localFilter = val || null;
+        this.autoOpen = !!(val && val.problem_id);
+        this.reloadTable();
+      },
     },
   },
   computed: {
@@ -84,6 +108,8 @@ export default {
           try {
             const page = Math.floor(data.start / data.length) + 1;
             const params = { _page: page, _per_page: data.length };
+            //if we are linking from the search page, we want to filter to the specific problem
+            if (this.localFilter) Object.assign(params, this.localFilter);
 
             const order = data.order && data.order[0];
             
@@ -95,6 +121,15 @@ export default {
             }
 
             const { rows, total } = await getProblemsPaged(params);
+
+            if (this.autoOpen) {
+              this.autoOpen = false;
+              const row = rows.find(
+                (r) => Number(r.problem_id) === Number(this.localFilter.problem_id)
+              );
+              if (row) this.openProblem(row);
+            }
+
             callback({
               draw: data.draw,
               data: rows,

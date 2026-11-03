@@ -10,6 +10,7 @@
       :search-term="searchTerm"
       @search="onSearch"
       @select="openEntry"
+      @problem="openProblem"
     />
     <CreateView
       v-if="view === 'new'"
@@ -38,7 +39,7 @@
       @step="onStep"
     />
     <DeleteView v-if="view === 'delete'" />
-    <ProblemsView v-if="view === 'problems'" />
+    <ProblemsView v-if="view === 'problems'" :filter="problemFilter" />
     <AdminView v-if="view === 'admin'" />
   </div>
 </template>
@@ -58,7 +59,7 @@ export default {
   name: "Main",
   components: { SearchView, CreateView, BulkCreateView, ScanningViewOne, ScanningViewTwo, DeleteView, ProblemsView, AdminView },
   data() {
-    return { view: "search", entry: null, searchType: "biblionumber", searchTerm: "", savedNotice: null };
+    return { view: "search", entry: null, searchType: "biblionumber", searchTerm: "", savedNotice: null, problemFilter: null };
   },
   computed: {
     savedNoticeText() {
@@ -90,6 +91,11 @@ export default {
         return;
       }
       this.view = view;
+      this.savedNotice = null;
+    },
+    openProblem(problemId) {
+      this.problemFilter = { problem_id: problemId };
+      this.view = "problems";
       this.savedNotice = null;
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="onTableClick">
     <form @submit.prevent="runSearch()" class="fsrm-search">
       <select v-model="localSearchType">
         <option value="biblionumber">TN (biblionumber)</option>
@@ -64,7 +64,7 @@ export default {
     searchType: { type: String, default: "biblionumber" },
     searchTerm: { type: String, default: "" },
   },
-  emits: ["search", "select"],
+  emits: ["search", "select", "problem"],
   data() {
     return {
       localSearchType: this.searchType,
@@ -112,7 +112,8 @@ export default {
               return d.split(",").map((chunk) => {
                 const [id, open] = chunk.split(":");
                 const cls = open === "1" ? "fsrm-problem-open" : "fsrm-problem-closed";
-                return `<span class="${cls}">${id}</span>`;
+                return `<a href="#" class="${cls} fsrm-problem-link" data-problem-id="${id}">${id}</a>`;
+
               }).join(", ");
           } },
           { data: "biblionumber" },
@@ -165,6 +166,12 @@ export default {
       }
       this.activeSearch = { type: this.localSearchType, term: this.localSearchTerm };
       this.tableKey += 1; // remount the table so a new search starts at page 1
+    },
+    onTableClick(e) {
+      const link = e.target.closest(".fsrm-problem-link");
+      if (!link) return;
+      e.preventDefault();
+      this.$emit("problem", Number(link.dataset.problemId));
     },
   },
 };
