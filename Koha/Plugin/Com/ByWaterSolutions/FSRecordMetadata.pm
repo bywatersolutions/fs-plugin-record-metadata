@@ -349,24 +349,28 @@ sub get_record_details {
     my $biblio;
     my $itemnumber;
     my @items;
+
     if ( $params->{barcode} ) {
         my $item = Koha::Items->find( { barcode => $params->{barcode} } );
         return unless $item;
-        $biblio = $item->biblio;
+        $biblio     = $item->biblio;
         $itemnumber = $item->itemnumber;
-        @items  = ($item);
     }
     elsif ( $params->{biblionumber} ) {
         $biblio = Koha::Biblios->find( $params->{biblionumber} );
-        @items  = $biblio ? $biblio->items->as_list : ();
-
-        my $hidden = $self->hidden_itypes;
-        @items = grep { !$hidden->{ uc( $_->effective_itemtype // '' ) } } @items
-            if %$hidden;
     }
 
     return unless $biblio;
 
+    @items = $biblio->items->as_list;
+
+    my $hidden = $self->hidden_itypes;
+    if ( %$hidden ) {
+        @items = grep {
+            ( defined $itemnumber && $_->itemnumber == $itemnumber )
+                || !$hidden->{ uc( $_->effective_itemtype // '' ) }
+        } @items;
+    }
     my $record = $biblio->metadata->record;
 
    my $title = join ' ', grep { defined && length }

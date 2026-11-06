@@ -168,21 +168,6 @@ sub search_entries {
                    e.ocr_date             IS NOT NULL AS ocr,
                    e.pdf_loaded_date      IS NOT NULL AS published,
                    e.review_complete_date IS NOT NULL AS online_review,
-                   IF(e.itemnumber IS NULL,
-                      (SELECT GROUP_CONCAT(i.barcode ORDER BY i.barcode SEPARATOR ', ')
-                       FROM items i WHERE i.biblionumber = e.biblionumber),
-                      (SELECT i.barcode FROM items i WHERE i.itemnumber = e.itemnumber)
-                   ) AS barcodes,
-                   IF(e.itemnumber IS NULL,
-                      (SELECT GROUP_CONCAT(DISTINCT i.itemcallnumber SEPARATOR ', ')
-                       FROM items i WHERE i.biblionumber = e.biblionumber),
-                      (SELECT i.itemcallnumber FROM items i WHERE i.itemnumber = e.itemnumber)
-                   ) AS callnumbers,
-                   IF(e.itemnumber IS NULL,
-                      (SELECT GROUP_CONCAT(DISTINCT i.itype SEPARATOR ', ')
-                       FROM items i WHERE i.biblionumber = e.biblionumber),
-                      (SELECT i.itype FROM items i WHERE i.itemnumber = e.itemnumber)
-                   ) AS itypes,
                    (SELECT GROUP_CONCAT(
                         CONCAT(p.problem_id, ':', IF(p.solution_date IS NULL, '1', '0'))
                         ORDER BY p.problem_id SEPARATOR ',')
