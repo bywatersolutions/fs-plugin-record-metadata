@@ -116,7 +116,10 @@ export default {
 
               }).join(", ");
           } },
-          { data: "biblionumber" },
+          { data: "biblionumber", render: (d) =>
+              d
+                ? `<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=${d}" target="_blank" rel="noopener">${d}</a>`
+                : "" },
           { data: "dtn", defaultContent: "" },
           {
             data: null,
