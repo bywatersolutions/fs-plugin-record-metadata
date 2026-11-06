@@ -27,6 +27,8 @@ use Koha::Items;
 use Koha::Plugin::Com::ByWaterSolutions::FSRecordMetadata::AccessLevel
     qw( resolve_access_level access_control_fields );
 
+use Koha::Plugin::Com::ByWaterSolutions::FSRecordMetadata::WriteMARC qw( write_entry_856 );
+
 use Exporter 'import';
 our @EXPORT_OK = qw(
     entry_columns create_only_columns
@@ -242,7 +244,10 @@ sub create_entry {
 
     $dbh->do( $sql, undef, @binds );
 
-    return $dbh->last_insert_id( undef, undef, $table, undef );
+    my $entry_id = $dbh->last_insert_id( undef, undef, $table, undef );
+    write_entry_856( $params, { skip_record_index => $params->{_bulk} ? 1 : 0 } );
+
+    return $entry_id;
 }
 
 sub create_entries {
